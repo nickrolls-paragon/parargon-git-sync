@@ -26,6 +26,7 @@ jobs:
       - id: pull
         uses: useparagon/paragraph-pull@v1
         with:
+          subfolder: 'nick-rolls'
           projectId: ${{ inputs.projectId }}
           commitId: ${{ inputs.commitId }}
           paragonKey: ${{ secrets.PARAGON_CLI_KEY }}
