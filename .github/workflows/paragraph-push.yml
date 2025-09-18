@@ -18,6 +18,7 @@ jobs:
       - id: push
         uses: useparagon/paragraph-push@v1
         with:
+          subfolder: 'nick-rolls'
           paragonKey: ${{ secrets.PARAGON_CLI_KEY }}
           paragonZeusUrl: https://zeus.useparagon.com
           paragonDashboardUrl: https://dashboard.useparagon.com
