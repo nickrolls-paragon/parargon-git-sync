@@ -5,9 +5,9 @@ import { ConditionalInput } from '@useparagon/core/steps/library/conditional';
 import { IConnectUser, IPermissionContext } from '@useparagon/core/user';
 import {
   createInputs,
-  IAirtableIntegration,
+  IGongIntegration,
   InputResultMap,
-} from '@useparagon/integrations/airtable';
+} from '@useparagon/integrations/gong';
 
 import personaMeta from '../../../persona.meta';
 
@@ -15,7 +15,7 @@ import personaMeta from '../../../persona.meta';
  * New Workflow Workflow implementation
  */
 export default class extends Workflow<
-  IAirtableIntegration,
+  IGongIntegration,
   IPersona<typeof personaMeta>,
   InputResultMap
 > {
@@ -23,7 +23,7 @@ export default class extends Workflow<
    * Define workflow steps and orchestration.
    */
   define(
-    integration: IAirtableIntegration,
+    integration: IGongIntegration,
     context: IContext<InputResultMap>,
     connectUser: IConnectUser<IPersona<typeof personaMeta>>,
   ) {
@@ -34,13 +34,22 @@ export default class extends Workflow<
       bodyValidations: [] as const,
     });
 
-    triggerStep;
+    const actionStep = integration.actions.getCallById(
+      { id: `${triggerStep.output.request.body}` },
+      {
+        autoRetry: false,
+        continueWorkflowOnError: false,
+        description: 'description',
+      },
+    );
+
+    triggerStep.nextStep(actionStep);
 
     /**
      * Pass all steps used in the workflow to the `.register()`
      * function. The keys used in this function must remain stable.
      */
-    return this.register({ triggerStep });
+    return this.register({ triggerStep, actionStep });
   }
 
   /**
@@ -88,5 +97,5 @@ export default class extends Workflow<
   /**
    * This property is maintained by Paragon. Do not edit this property.
    */
-  readonly id: string = '6e980200-0ab3-4f14-8ab8-020f965b5d77';
+  readonly id: string = '4a63cd86-195c-4713-84aa-706a66685671';
 }

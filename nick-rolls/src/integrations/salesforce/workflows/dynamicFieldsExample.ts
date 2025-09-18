@@ -1,4 +1,4 @@
-import { RequestStep, Workflow } from '@useparagon/core';
+import { FunctionStep, RequestStep, Workflow } from '@useparagon/core';
 import { IContext } from '@useparagon/core/execution';
 import { IPersona } from '@useparagon/core/persona';
 import { ConditionalInput } from '@useparagon/core/steps/library/conditional';
@@ -59,13 +59,28 @@ export default class extends Workflow<
       },
     );
 
-    triggerStep.nextStep(requestStep).nextStep(actionStep);
+    const functionStep = new FunctionStep({
+      autoRetry: false,
+      description: 'description',
+      code: function yourFunction(parameters, libraries) {},
+      parameters: {},
+    });
+
+    triggerStep
+      .nextStep(requestStep)
+      .nextStep(actionStep)
+      .nextStep(functionStep);
 
     /**
      * Pass all steps used in the workflow to the `.register()`
      * function. The keys used in this function must remain stable.
      */
-    return this.register({ triggerStep, requestStep, actionStep });
+    return this.register({
+      triggerStep,
+      requestStep,
+      actionStep,
+      functionStep,
+    });
   }
 
   /**

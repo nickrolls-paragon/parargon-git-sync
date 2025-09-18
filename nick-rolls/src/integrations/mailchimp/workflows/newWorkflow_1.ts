@@ -1,4 +1,4 @@
-import { RequestStep, Workflow } from '@useparagon/core';
+import { EndpointStep, Workflow } from '@useparagon/core';
 import { IContext } from '@useparagon/core/execution';
 import { IPersona } from '@useparagon/core/persona';
 import { ConditionalInput } from '@useparagon/core/steps/library/conditional';
@@ -10,7 +10,6 @@ import {
 } from '@useparagon/integrations/mailchimp';
 
 import personaMeta from '../../../persona.meta';
-import sharedInputs from '../inputs';
 
 /**
  * New Workflow Workflow implementation
@@ -28,29 +27,22 @@ export default class extends Workflow<
     context: IContext<InputResultMap>,
     connectUser: IConnectUser<IPersona<typeof personaMeta>>,
   ) {
-    const triggerStep = integration.triggers.list({
-      listId: `${context.getInput(sharedInputs.lists)}`,
+    const triggerStep = new EndpointStep({
+      allowArbitraryPayload: false,
+      paramValidations: [] as const,
+      headerValidations: [] as const,
+      bodyValidations: [] as const,
     });
 
-    const requestStep = new RequestStep({
-      autoRetry: false,
-      continueWorkflowOnError: false,
-      description: 'description',
-      url: `https://webhook.site/1e9034a9-9256-4c48-af83-e049ae1392c3?=`,
-      method: 'POST',
-      params: { '': `` },
-      headers: {},
-      body: { data: `${triggerStep.output.result}` },
-      bodyType: 'json',
-    });
+    const actionStep = undefined;
 
-    triggerStep.nextStep(requestStep);
+    triggerStep.nextStep(actionStep);
 
     /**
      * Pass all steps used in the workflow to the `.register()`
      * function. The keys used in this function must remain stable.
      */
-    return this.register({ triggerStep, requestStep });
+    return this.register({ triggerStep, actionStep });
   }
 
   /**
@@ -68,15 +60,7 @@ export default class extends Workflow<
    * Settings, see ../config.ts.
    * https://docs.useparagon.com/connect-portal/workflow-user-settings
    */
-  inputs = createInputs({
-    text_field: {
-      id: '2c5120a1-4b85-4ca1-844b-8912e6c72092',
-      title: 'textField',
-      tooltip: '',
-      required: false,
-      type: 'list',
-    },
-  });
+  inputs = createInputs({});
 
   /**
    * If set to true, the workflow will appear as enabled by default once
@@ -106,5 +90,5 @@ export default class extends Workflow<
   /**
    * This property is maintained by Paragon. Do not edit this property.
    */
-  readonly id: string = '485a4979-492f-43c4-86b4-714ef6358409';
+  readonly id: string = '1353e0ae-cb51-436f-aa7a-1a54cc1ee2ab';
 }

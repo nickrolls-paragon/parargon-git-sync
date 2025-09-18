@@ -1,4 +1,8 @@
-import { EndpointStep, Workflow } from '@useparagon/core';
+import {
+  EndpointStep,
+  IntegrationRequestStep,
+  Workflow,
+} from '@useparagon/core';
 import { IContext } from '@useparagon/core/execution';
 import { IPersona } from '@useparagon/core/persona';
 import { ConditionalInput } from '@useparagon/core/steps/library/conditional';
@@ -34,13 +38,23 @@ export default class extends Workflow<
       bodyValidations: [] as const,
     });
 
-    triggerStep;
+    const integrationRequestStep = new IntegrationRequestStep({
+      autoRetry: false,
+      continueWorkflowOnError: false,
+      description: 'description',
+      method: 'GET',
+      url: `test`,
+      params: {},
+      headers: {},
+    });
+
+    triggerStep.nextStep(integrationRequestStep);
 
     /**
      * Pass all steps used in the workflow to the `.register()`
      * function. The keys used in this function must remain stable.
      */
-    return this.register({ triggerStep });
+    return this.register({ triggerStep, integrationRequestStep });
   }
 
   /**
@@ -88,5 +102,5 @@ export default class extends Workflow<
   /**
    * This property is maintained by Paragon. Do not edit this property.
    */
-  readonly id: string = '6e980200-0ab3-4f14-8ab8-020f965b5d77';
+  readonly id: string = '73a0c25c-1444-4cf3-9317-c063dfb292c9';
 }

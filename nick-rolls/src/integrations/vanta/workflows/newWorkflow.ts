@@ -1,4 +1,4 @@
-import { Workflow } from '@useparagon/core';
+import { EndpointStep, Workflow } from '@useparagon/core';
 import { IContext } from '@useparagon/core/execution';
 import { IPersona } from '@useparagon/core/persona';
 import { ConditionalInput } from '@useparagon/core/steps/library/conditional';
@@ -27,7 +27,12 @@ export default class extends Workflow<
     context: IContext<InputResultMap>,
     connectUser: IConnectUser<IPersona<typeof personaMeta>>,
   ) {
-    const triggerStep = undefined;
+    const triggerStep = new EndpointStep({
+      allowArbitraryPayload: false,
+      paramValidations: [] as const,
+      headerValidations: [] as const,
+      bodyValidations: [] as const,
+    });
 
     triggerStep;
 
@@ -83,5 +88,5 @@ export default class extends Workflow<
   /**
    * This property is maintained by Paragon. Do not edit this property.
    */
-  readonly id: string = '3c718064-438c-4a44-b9ad-18496642c558';
+  readonly id: string = '5c80d79f-4d09-4ce5-ba22-a1880bafe523';
 }

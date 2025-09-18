@@ -1,8 +1,4 @@
-import {
-  EndpointStep,
-  IntegrationRequestStep,
-  Workflow,
-} from '@useparagon/core';
+import { EndpointStep, Workflow } from '@useparagon/core';
 import { IContext } from '@useparagon/core/execution';
 import { IPersona } from '@useparagon/core/persona';
 import { ConditionalInput } from '@useparagon/core/steps/library/conditional';
@@ -38,49 +34,15 @@ export default class extends Workflow<
       bodyValidations: [] as const,
     });
 
-    const actionStep = integration.actions.searchFolders(
-      { filterFormula: undefined, folderId: `` },
-      {
-        autoRetry: false,
-        continueWorkflowOnError: false,
-        description: 'description',
-      },
-    );
+    const actionStep = undefined;
 
-    const listFilesStep = integration.actions.listFiles(
-      { filterFormula: undefined, folderId: `0` },
-      {
-        autoRetry: false,
-        continueWorkflowOnError: false,
-        description: 'list files',
-      },
-    );
-
-    const integrationRequestStep = new IntegrationRequestStep({
-      autoRetry: false,
-      continueWorkflowOnError: false,
-      description: 'Get file content',
-      method: 'GET',
-      url: `files/${listFilesStep.output.result.entries['0'].id}/content`,
-      params: {},
-      headers: {},
-    });
-
-    triggerStep
-      .nextStep(actionStep)
-      .nextStep(listFilesStep)
-      .nextStep(integrationRequestStep);
+    triggerStep.nextStep(actionStep);
 
     /**
      * Pass all steps used in the workflow to the `.register()`
      * function. The keys used in this function must remain stable.
      */
-    return this.register({
-      triggerStep,
-      actionStep,
-      listFilesStep,
-      integrationRequestStep,
-    });
+    return this.register({ triggerStep, actionStep });
   }
 
   /**
@@ -128,5 +90,5 @@ export default class extends Workflow<
   /**
    * This property is maintained by Paragon. Do not edit this property.
    */
-  readonly id: string = 'b352e42f-a359-414b-b48d-568759f0f54b';
+  readonly id: string = '03a80e3c-6895-4392-88f8-2ef35c6551ca';
 }

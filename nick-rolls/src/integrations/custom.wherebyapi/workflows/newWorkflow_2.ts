@@ -1,9 +1,4 @@
-import {
-  EndpointStep,
-  ICustomIntegration,
-  IntegrationRequestStep,
-  Workflow,
-} from '@useparagon/core';
+import { ICustomIntegration, UnselectedStep, Workflow } from '@useparagon/core';
 import { IContext } from '@useparagon/core/execution';
 import { DefaultInputToResultMap, createInputs } from '@useparagon/core/inputs';
 import { IPersona } from '@useparagon/core/persona';
@@ -28,30 +23,15 @@ export default class extends Workflow<
     context: IContext<DefaultInputToResultMap>,
     connectUser: IConnectUser<IPersona<typeof personaMeta>>,
   ) {
-    const triggerStep = new EndpointStep({
-      allowArbitraryPayload: false,
-      paramValidations: [] as const,
-      headerValidations: [] as const,
-      bodyValidations: [] as const,
-    });
+    const triggerStep = new UnselectedStep();
 
-    const integrationRequestStep = new IntegrationRequestStep({
-      autoRetry: false,
-      continueWorkflowOnError: false,
-      description: 'description',
-      method: 'GET',
-      url: `/meeetings`,
-      params: {},
-      headers: {},
-    });
-
-    triggerStep.nextStep(integrationRequestStep);
+    triggerStep;
 
     /**
      * Pass all steps used in the workflow to the `.register()`
      * function. The keys used in this function must remain stable.
      */
-    return this.register({ triggerStep, integrationRequestStep });
+    return this.register({ triggerStep });
   }
 
   /**
@@ -99,5 +79,5 @@ export default class extends Workflow<
   /**
    * This property is maintained by Paragon. Do not edit this property.
    */
-  readonly id: string = '38783b60-7250-4fc6-b779-91069ecb51a4';
+  readonly id: string = '129d240a-986a-45ab-bec2-774453b4601a';
 }

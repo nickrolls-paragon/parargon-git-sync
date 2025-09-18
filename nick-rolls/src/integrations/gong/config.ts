@@ -1,5 +1,7 @@
 import { IIntegrationConfig } from '@useparagon/core/integration';
 
+import { default as NewWorkflow } from './workflows/newWorkflow';
+
 /**
  * configuration for a gong
  */
@@ -13,7 +15,7 @@ Our Gong integration enables you to:
 • Sync CRM inputs in Gong
 • Audit logs from Gong`,
   showWatermark: true,
-  workflowDisplayOrder: [],
+  workflowDisplayOrder: [NewWorkflow],
 };
 
 export default config;
